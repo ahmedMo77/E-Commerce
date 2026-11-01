@@ -48,7 +48,9 @@ namespace ECommerce.Infrastructure.Data.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(oi => oi.OrderId);
+            builder.HasIndex(oi => new { 
+                oi.OrderId, oi.ProductId })
+                .IsUnique();
             builder.HasIndex(oi => oi.ProductId);
         }
     }

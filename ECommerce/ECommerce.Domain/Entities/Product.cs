@@ -14,7 +14,7 @@ namespace ECommerce.Domain.Entities
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public int StoreId { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public Store Store { get; set; } = null!;
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

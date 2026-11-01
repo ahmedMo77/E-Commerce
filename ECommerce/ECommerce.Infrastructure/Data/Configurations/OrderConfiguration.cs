@@ -33,7 +33,7 @@ namespace ECommerce.Infrastructure.Data.Configurations
 
             builder.HasOne(o => o.Customer)
                 .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.Customer.Id)
+                .HasForeignKey(o => o.CustomerId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

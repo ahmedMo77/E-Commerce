@@ -1,4 +1,9 @@
+using ECommerce.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Register Services
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 

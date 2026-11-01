@@ -35,7 +35,6 @@ namespace ECommerce.Infrastructure.Data.Configurations
                 .IsRequired();
 
             builder.Property(p => p.IsActive)
-                .HasDefaultValue(true)
                 .IsRequired();
 
             builder.HasOne(p => p.Store)
