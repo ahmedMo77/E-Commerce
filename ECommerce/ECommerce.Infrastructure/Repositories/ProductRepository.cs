@@ -78,5 +78,24 @@ namespace ECommerce.Infrastructure.Repositories
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync(ct);
         }
+
+        public async Task<bool> TryDecreaseStockAsync(
+            int productId,
+            int quantity,
+            CancellationToken ct = default)
+        {
+            var affectedRows = await _dbSet
+                .Where(p =>
+                    p.Id == productId &&
+                    p.IsActive &&
+                    p.Quantity >= quantity)
+                .ExecuteUpdateAsync(
+                    setters => setters.SetProperty(
+                        p => p.Quantity,
+                        p => p.Quantity - quantity),
+                    ct);
+
+            return affectedRows > 0;
+        }
     }
 }

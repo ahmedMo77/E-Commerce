@@ -1,11 +1,6 @@
 ﻿using ECommerce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Data.Configurations
 {
@@ -20,7 +15,8 @@ namespace ECommerce.Infrastructure.Data.Configurations
             builder.HasOne(c => c.Customer)
                 .WithOne(u => u.Cart)
                 .HasForeignKey<Cart>(c => c.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.CartItems)
                 .WithOne(ci => ci.Cart)

@@ -3,11 +3,6 @@ using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Domain.Entities;
 using ECommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Repositories
 {
@@ -38,7 +33,9 @@ namespace ECommerce.Infrastructure.Repositories
         {
             var query = _dbSet
                 .AsNoTracking()
-                .Where(o => o.CustomerId == customerId);
+                .Where(o => o.CustomerId == customerId)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product);
 
             var totalCount = await query.CountAsync(ct);
 
@@ -51,6 +48,52 @@ namespace ECommerce.Infrastructure.Repositories
             return new PagedResult<Order>
             {
                 Items = orders,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
+        }
+
+        public async Task<StoreOrder?> GetStoreOrderAsync(
+            int storeOrderId,
+            int storeId,
+            CancellationToken ct = default)
+        {
+            return await _context.Set<StoreOrder>()
+                .Include(so => so.Order)
+                    .ThenInclude(o => o.OrderItems
+                        .Where(oi => oi.Product.StoreId == storeId))
+                        .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(
+                    so => so.Id == storeOrderId && so.StoreId == storeId,
+                    ct);
+        }
+
+        public async Task<PagedResult<StoreOrder>> GetStoreOrdersAsync(
+            int storeId,
+            int pageNumber,
+            int pageSize,
+            CancellationToken ct = default)
+        {
+            var query = _context.Set<StoreOrder>()
+                .AsNoTracking()
+                .Where(so => so.StoreId == storeId);
+
+            var totalCount = await query.CountAsync(ct);
+
+            var storeOrders = await query
+                .OrderByDescending(so => so.Id)
+                .Include(so => so.Order)
+                    .ThenInclude(o => o.OrderItems
+                        .Where(oi => oi.Product.StoreId == storeId))
+                        .ThenInclude(oi => oi.Product)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(ct);
+
+            return new PagedResult<StoreOrder>
+            {
+                Items = storeOrders,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalCount = totalCount

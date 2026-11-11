@@ -8,16 +8,27 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.Interfaces.Repositories
 {
-    public interface IOrderRepository
-        : IGenericRepository<Order>
+    public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<Order?> GetOrderDetailsAsync(
             int orderId,
             CancellationToken ct = default);
+
         Task<PagedResult<Order>> GetOrdersByCustomerIdAsync(
             int customerId,
             int pageNumber,
             int pageSize,
+            CancellationToken ct = default);
+
+        Task<PagedResult<StoreOrder>> GetStoreOrdersAsync(
+            int storeId,
+            int pageNumber,
+            int pageSize,
+            CancellationToken ct = default);
+
+        Task<StoreOrder?> GetStoreOrderAsync(
+            int storeOrderId,
+            int storeId,
             CancellationToken ct = default);
     }
 }

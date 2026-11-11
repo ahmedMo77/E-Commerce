@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerce.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,12 @@ namespace ECommerce.Domain.Entities
         public int CustomerId { get; set; }
         public DateTime CreatedAt { get; set; }
         public decimal TotalAmount { get; set; }
+        public OrderStatus Status { get; set; }
 
         public AppUser Customer { get; set; } = null!;
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<OrderItem> OrderItems { get; set; }
+            = new List<OrderItem>();
+        public ICollection<StoreOrder> StoreOrders { get; set; }
+            = new List<StoreOrder>();
     }
 }

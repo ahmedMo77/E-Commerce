@@ -1,8 +1,8 @@
 ﻿using ECommerce.Domain.Entities;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace ECommerce.Infrastructure.Data
 {
@@ -29,6 +29,11 @@ namespace ECommerce.Infrastructure.Data
 
             builder.ApplyConfigurationsFromAssembly(
                 typeof(AppDbContext).Assembly);
+
+            // Configure MassTransit entities
+            builder.AddInboxStateEntity();
+            builder.AddOutboxMessageEntity();
+            builder.AddOutboxStateEntity();
         }
     }
 }

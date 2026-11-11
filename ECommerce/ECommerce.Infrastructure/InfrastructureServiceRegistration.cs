@@ -1,14 +1,13 @@
-﻿using ECommerce.Application.Interfaces.Repositories;
+﻿using ECommerce.Application.Interfaces.Messaging;
+using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Infrastructure.Data;
+using ECommerce.Infrastructure.Messaging;
 using ECommerce.Infrastructure.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ECommerce.Infrastructure
 {
@@ -32,9 +31,36 @@ namespace ECommerce.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
 
             // Unit Of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Event Publisher
+            services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
+
+            // MassTransit with RabbitMQ
+            services.AddMassTransit(x =>
+            {
+                x.AddEntityFrameworkOutbox<AppDbContext>(options =>
+                {
+                    options.UseSqlServer();
+                    options.UseBusOutbox();
+                });
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(
+                        configuration["RabbitMQ:Host"],
+                        h =>
+                        {
+                            h.Username(configuration["RabbitMQ:Username"]);
+                            h.Password(configuration["RabbitMQ:Password"]);
+                        });
+
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
             return services;
         }

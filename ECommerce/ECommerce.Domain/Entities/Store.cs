@@ -15,6 +15,9 @@ namespace ECommerce.Domain.Entities
         public int ManagerId { get; set; }
 
         public AppUser Manager { get; set; } = null!;
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<Product> Products { get; set; } 
+            = new List<Product>();
+        public ICollection<StoreOrder> StoreOrders { get; set; }
+            = new List<StoreOrder>();
     }
 }

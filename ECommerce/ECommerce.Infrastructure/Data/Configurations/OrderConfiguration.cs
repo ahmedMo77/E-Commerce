@@ -1,11 +1,6 @@
 ﻿using ECommerce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Data.Configurations
 {
@@ -29,6 +24,10 @@ namespace ECommerce.Infrastructure.Data.Configurations
 
             builder.Property(o => o.TotalAmount)
                 .HasPrecision(18, 2)
+                .IsRequired();
+
+            builder.Property(x => x.Status)
+                .HasConversion<string>()
                 .IsRequired();
 
             builder.HasOne(o => o.Customer)

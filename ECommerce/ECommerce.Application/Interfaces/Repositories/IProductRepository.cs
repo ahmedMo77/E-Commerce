@@ -25,5 +25,10 @@ namespace ECommerce.Application.Interfaces.Repositories
         Task<IEnumerable<Product>> GetProductsByIdsAsync(
             IEnumerable<int> ids,
             CancellationToken ct = default);
+
+        Task<bool> TryDecreaseStockAsync(
+            int productId,
+            int quantity,
+            CancellationToken ct = default);
     }
 }
