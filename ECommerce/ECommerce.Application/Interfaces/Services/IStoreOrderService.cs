@@ -1,5 +1,4 @@
-﻿using ECommerce.Application.Common.DTOs;
-using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Application.DTOs.Orders;
 using System;
 using System.Collections.Generic;

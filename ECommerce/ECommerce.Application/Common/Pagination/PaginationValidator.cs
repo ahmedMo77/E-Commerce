@@ -1,12 +1,12 @@
-﻿using ECommerce.Application.Common.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Application.Common.Helpers
+namespace ECommerce.Application.Common.Pagination
 {
+    // This class is responsible for validating the pagination parameters.
     public static class PaginationValidator
     {
         public static void Validate(PaginationParams pagination)

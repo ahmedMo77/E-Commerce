@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using ECommerce.Application.Common.DTOs;
-using ECommerce.Application.Common.Helpers;
-using ECommerce.Application.Common.Models;
-using ECommerce.Application.DTOs;
+using ECommerce.Application.Common.Pagination;
+using ECommerce.Application.DTOs.Product;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Interfaces.Services;
 

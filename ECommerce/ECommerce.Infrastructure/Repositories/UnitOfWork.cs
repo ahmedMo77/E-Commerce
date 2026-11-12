@@ -1,10 +1,5 @@
 ﻿using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Repositories
 {

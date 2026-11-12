@@ -1,5 +1,4 @@
-﻿using ECommerce.Application.Common.DTOs;
-using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Application.DTOs.Orders;
 using ECommerce.Domain.Entities;
 
@@ -17,6 +16,11 @@ namespace ECommerce.Application.Interfaces.Services
             CancellationToken ct = default);
 
         Task<OrderDto?> GetOrderDetailsAsync(
+            int customerId,
+            int orderId,
+            CancellationToken ct = default);
+
+        Task<OrderDto?> CancelOrderAsync(
             int customerId,
             int orderId,
             CancellationToken ct = default);

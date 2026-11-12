@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using ECommerce.Application.DTOs;
 using ECommerce.Application.DTOs.Carts;
 using ECommerce.Application.DTOs.Orders;
+using ECommerce.Application.DTOs.Product;
 using ECommerce.Application.DTOs.Store;
 using ECommerce.Domain.Entities;
 

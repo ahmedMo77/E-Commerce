@@ -1,10 +1,5 @@
-﻿using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Application.Interfaces.Repositories
 {
@@ -27,6 +22,11 @@ namespace ECommerce.Application.Interfaces.Repositories
             CancellationToken ct = default);
 
         Task<bool> TryDecreaseStockAsync(
+            int productId,
+            int quantity,
+            CancellationToken ct = default);
+
+        Task<bool> TryIncreaseStockAsync(
             int productId,
             int quantity,
             CancellationToken ct = default);

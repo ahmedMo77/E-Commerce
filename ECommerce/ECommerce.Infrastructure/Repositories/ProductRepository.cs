@@ -1,13 +1,8 @@
-﻿using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Domain.Entities;
 using ECommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Repositories
 {
@@ -93,6 +88,22 @@ namespace ECommerce.Infrastructure.Repositories
                     setters => setters.SetProperty(
                         p => p.Quantity,
                         p => p.Quantity - quantity),
+                    ct);
+
+            return affectedRows > 0;
+        }
+
+        public async Task<bool> TryIncreaseStockAsync(
+            int productId,
+            int quantity,
+            CancellationToken ct = default)
+        {
+            var affectedRows = await _dbSet
+                .Where(p => p.Id == productId)
+                .ExecuteUpdateAsync(
+                    setters => setters.SetProperty(
+                        p => p.Quantity,
+                        p => p.Quantity + quantity),
                     ct);
 
             return affectedRows > 0;

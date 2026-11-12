@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Domain.Entities;
 using ECommerce.Infrastructure.Data;
@@ -98,6 +98,26 @@ namespace ECommerce.Infrastructure.Repositories
                 PageSize = pageSize,
                 TotalCount = totalCount
             };
+        }
+
+        public async Task<List<StoreOrder>> GetStoreOrdersByOrderIdAsync(
+            int orderId,
+            CancellationToken ct = default)
+        {
+            return await _context.Set<StoreOrder>()
+                .Where(so => so.OrderId == orderId)
+                .ToListAsync(ct);
+        }
+
+        public async Task<Order?> GetOrderForCancellationAsync(
+            int orderId,
+            CancellationToken ct = default)
+        {
+            return await _dbSet
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .Include(o => o.StoreOrders)
+                .FirstOrDefaultAsync(o => o.Id == orderId, ct);
         }
     }
 }

@@ -39,6 +39,13 @@ namespace ECommerce.Infrastructure
             // Event Publisher
             services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
 
+            var rabbitMqHost = configuration["RabbitMQ:Host"]
+                ?? throw new InvalidOperationException("Configuration value 'RabbitMQ:Host' is required.");
+            var rabbitMqUsername = configuration["RabbitMQ:Username"]
+                ?? throw new InvalidOperationException("Configuration value 'RabbitMQ:Username' is required.");
+            var rabbitMqPassword = configuration["RabbitMQ:Password"]
+                ?? throw new InvalidOperationException("Configuration value 'RabbitMQ:Password' is required.");
+
             // MassTransit with RabbitMQ
             services.AddMassTransit(x =>
             {
@@ -51,11 +58,11 @@ namespace ECommerce.Infrastructure
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(
-                        configuration["RabbitMQ:Host"],
+                        rabbitMqHost,
                         h =>
                         {
-                            h.Username(configuration["RabbitMQ:Username"]);
-                            h.Password(configuration["RabbitMQ:Password"]);
+                            h.Username(rabbitMqUsername);
+                            h.Password(rabbitMqPassword);
                         });
 
                     cfg.ConfigureEndpoints(context);

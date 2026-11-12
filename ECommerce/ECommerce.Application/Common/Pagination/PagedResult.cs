@@ -1,5 +1,4 @@
-﻿
-namespace ECommerce.Application.Common.Models
+﻿namespace ECommerce.Application.Common.Pagination
 {
     public class PagedResult<T>
     {

@@ -1,13 +1,12 @@
-﻿using ECommerce.Application.Common.DTOs;
+﻿using AutoMapper;
 using ECommerce.Application.Common.Events;
-using ECommerce.Application.Common.Helpers;
-using ECommerce.Application.Common.Models;
+using ECommerce.Application.Common.Pagination;
 using ECommerce.Application.DTOs.Orders;
 using ECommerce.Application.Interfaces.Messaging;
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Interfaces.Services;
 using ECommerce.Domain.Entities;
-using AutoMapper;
+using ECommerce.Domain.Enums;
 
 
 namespace ECommerce.Application.Services
@@ -100,6 +99,58 @@ namespace ECommerce.Application.Services
 
             return _mapper.Map<OrderDto>(order);
         }
+
+        public async Task<OrderDto?> CancelOrderAsync(
+            int customerId,
+            int orderId,
+            CancellationToken ct = default)
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(
+                async token =>
+                {
+                    var order = await _orderRepository
+                        .GetOrderForCancellationAsync(orderId, token);
+
+                    if (order is null || order.CustomerId != customerId)
+                        return null;
+
+                    if (order.Status != OrderStatus.Pending)
+                    {
+                        throw new InvalidOperationException(
+                            "Only pending orders can be cancelled.");
+                    }
+
+                    // Restore product stock
+                    foreach (var item in order.OrderItems)
+                    {
+                        var success = await _productRepository.TryIncreaseStockAsync(
+                            item.ProductId,
+                            item.Quantity,
+                            token);
+
+                        if (!success)
+                        {
+                            throw new InvalidOperationException(
+                                $"Product {item.ProductId} was not found.");
+                        }
+                    }
+
+                    // Cancel the main order
+                    order.Status = OrderStatus.Cancelled;
+
+                    // Cancel all related store orders
+                    foreach (var storeOrder in order.StoreOrders)
+                    {
+                        storeOrder.Status = OrderStatus.Cancelled;
+                    }
+
+                    await _unitOfWork.SaveChangesAsync(token);
+
+                    return _mapper.Map<OrderDto>(order);
+
+                }, ct);
+        }
+
 
         //Helper methods to encapsulate common logic for retrieving the cart,
         // decreasing stock, creating an order, and publishing events.

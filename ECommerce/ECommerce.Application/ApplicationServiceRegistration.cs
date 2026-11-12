@@ -11,7 +11,9 @@ namespace ECommerce.Application.Extensions
             this IServiceCollection services)
         {
             // AutoMapper
-            services.AddAutoMapper(typeof(ApplicationServiceRegistration).Assembly);
+            services.AddAutoMapper(
+                _ => { },
+                typeof(ApplicationServiceRegistration).Assembly);
 
             // Services
             services.AddScoped<IStoreService, StoreService>();

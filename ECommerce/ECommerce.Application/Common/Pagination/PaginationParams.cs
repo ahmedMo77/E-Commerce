@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Application.Common.DTOs
+namespace ECommerce.Application.Common.Pagination
 {
     public class PaginationParams
     {

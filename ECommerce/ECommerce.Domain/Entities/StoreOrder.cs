@@ -12,7 +12,8 @@ namespace ECommerce.Domain.Entities
         public int Id { get; set; }
         public int StoreId { get; set; }
         public int OrderId { get; set; }
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; set; } 
+            = OrderStatus.Pending;
         public DateTime CreatedAt { get; set; }
 
         public Store Store { get; set; } = null!;

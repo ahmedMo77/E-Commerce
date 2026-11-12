@@ -1,10 +1,5 @@
-﻿using ECommerce.Application.Common.Models;
+﻿using ECommerce.Application.Common.Pagination;
 using ECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Application.Interfaces.Repositories
 {
@@ -29,6 +24,14 @@ namespace ECommerce.Application.Interfaces.Repositories
         Task<StoreOrder?> GetStoreOrderAsync(
             int storeOrderId,
             int storeId,
+            CancellationToken ct = default);
+
+        Task<List<StoreOrder>> GetStoreOrdersByOrderIdAsync(
+            int orderId,
+            CancellationToken ct = default);
+
+        Task<Order?> GetOrderForCancellationAsync(
+            int orderId,
             CancellationToken ct = default);
     }
 }
